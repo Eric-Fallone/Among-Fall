@@ -17,9 +17,11 @@ public class NetworkManagerAmongFall : NetworkManager
 
 	[Header("Game")]
 	[SerializeField] private NetworkGamePlayer GamePlayerPrefab = null;
+	[SerializeField] private GameObject PlayerSpawnSystem = null;
 
 	public static event Action OnClientConnected;
 	public static event Action OnClientDisconnected;
+	public static event Action<NetworkConnection> OnServerReadied;
 
 	public List<NetworkLobbyPlayer> RoomPlayers { get; } = new List<NetworkLobbyPlayer>();
 
@@ -27,12 +29,25 @@ public class NetworkManagerAmongFall : NetworkManager
 	public List<NetworkGamePlayer> GameSpector { get; } = new List<NetworkGamePlayer>();
 
 
+
 	#region Server
 
 	public override void OnStartServer()
 	{
 		spawnPrefabs = Resources.LoadAll<GameObject>("SpawnablePrefabs").ToList();
+		print(spawnPrefabs.Count);
+
 		print(this.networkAddress);
+	}
+
+	public override void OnStartClient()
+	{
+		var spawnablePrefabs = Resources.LoadAll<GameObject>("SpawnablePrefabs");
+
+		foreach (var prefab in spawnablePrefabs)
+		{
+			ClientScene.RegisterPrefab(prefab);
+		}
 	}
 
 
@@ -125,11 +140,11 @@ public class NetworkManagerAmongFall : NetworkManager
 	{
 		if ("Assets/Scenes/" + SceneManager.GetActiveScene().name + ".unity" == MenuScene && newSceneName.StartsWith("Assets/Scenes/Level"))
 		{
-			
 			for(int i = RoomPlayers.Count - 1; i >= 0; i--)
 			{
 				var conn = RoomPlayers[i].connectionToClient;
 				var gamePlayerInstance = Instantiate(GamePlayerPrefab);
+				//add to list?
 
 				gamePlayerInstance.SetDisplayName(RoomPlayers[i].DisplayName);
 				
@@ -142,19 +157,13 @@ public class NetworkManagerAmongFall : NetworkManager
 		base.ServerChangeScene(newSceneName);
 	}
 
-	#endregion
-
-	#region Client
-
-	public override void OnStartClient()
+	public override void OnServerReady(NetworkConnection conn)
 	{
-		var spawnablePrefabs = Resources.LoadAll<GameObject>("SpawnablePrefabs");
+		base.OnServerReady(conn);
 
-		foreach (var prefab in spawnablePrefabs)
-		{
-			ClientScene.RegisterPrefab(prefab);
-		}
+		OnServerReadied?.Invoke(conn);
 	}
+
 
 	public override void OnClientConnect(NetworkConnection conn)
 	{
@@ -168,5 +177,16 @@ public class NetworkManagerAmongFall : NetworkManager
 
 		OnClientDisconnected?.Invoke();
 	}
+
+	public override void OnServerChangeScene(string newSceneName)
+	{
+		if (newSceneName.StartsWith("Assets/Scenes/Level"))
+		{
+			GameObject playerSpawnSystemInstance = Instantiate(PlayerSpawnSystem);
+			NetworkServer.Spawn(playerSpawnSystemInstance);
+		}
+	}
+	
+
 	#endregion
 }

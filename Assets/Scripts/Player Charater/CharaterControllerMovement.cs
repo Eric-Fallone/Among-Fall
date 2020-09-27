@@ -1,18 +1,24 @@
-﻿using System;
+﻿using Mirror;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class CharaterControllerMovement : MonoBehaviour 
+public class CharaterControllerMovement : NetworkBehaviour
 {
 	public float speed = 10f;
 
 	public Vector3 inputValue = Vector3.zero;
 	private float inputSqrMagnitude;
 
-    // Start is called before the first frame update
-    void Start()
+	public override void OnStartAuthority()
+	{
+		enabled = true;
+	}
+
+	// Start is called before the first frame update
+	void Start()
     {
         
     }
@@ -53,7 +59,10 @@ public class CharaterControllerMovement : MonoBehaviour
 
 	private void SetInput()
 	{
-		inputValue.x = Input.GetAxis("Horizontal");
-		inputValue.z = Input.GetAxis("Vertical");
+		if (enabled)
+		{
+			inputValue.x = Input.GetAxis("Horizontal");
+			inputValue.z = Input.GetAxis("Vertical");
+		}
 	}
 }

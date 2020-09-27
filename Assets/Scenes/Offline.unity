@@ -1615,7 +1615,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: Play
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1642,10 +1642,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
+  m_fontSize: 53.7
   m_fontSizeBase: 24
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -3424,8 +3424,8 @@ MonoBehaviour:
   autoStartServerBuild: 1
   showDebugMessages: 0
   serverTickRate: 30
-  offlineScene: 
-  onlineScene: Assets/Scenes/Offline.unity
+  offlineScene: Assets/Scenes/Offline.unity
+  onlineScene: Assets/Scenes/Lobby.unity
   transport: {fileID: 2137386503}
   networkAddress: localhost
   maxConnections: 20
@@ -3439,9 +3439,12 @@ MonoBehaviour:
   spawnPrefabs:
   - {fileID: 4444977745170027018, guid: 7dff7c499a4a28649baae9b5cb55d624, type: 3}
   - {fileID: 2269443097824386725, guid: c4653270e66d48c40aad860de8d4999c, type: 3}
-  MinPlayers: 2
-  MenuScene: Assets/Scenes/Offline.unity
+  MinPlayers: 1
+  MenuScene: Assets/Scenes/Lobby.unity
+  GameSceneDruid: Assets/Scenes/Level - Druid.unity
   RoomPlayerPrefab: {fileID: 6933117804080797720, guid: 7dff7c499a4a28649baae9b5cb55d624,
+    type: 3}
+  GamePlayerPrefab: {fileID: 4426911190448452725, guid: 2f3c18e6b5d6a8b48becd4f129e2bbf5,
     type: 3}
 --- !u!4 &2137386505
 Transform:

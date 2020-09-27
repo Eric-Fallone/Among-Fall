@@ -7,20 +7,33 @@ using UnityEngine.SceneManagement;
 
 public class NetworkManagerAmongFall : NetworkManager
 {
+	[Header("Game")]
 	[SerializeField] private int MinPlayers = 2;
 	[Scene] [SerializeField] private string MenuScene = string.Empty;
+	[Scene] [SerializeField] private string GameSceneDruid = string.Empty;
 
 	[Header("Room")]
-	[SerializeField] private NetworkRoomPlayerLobby RoomPlayerPrefab = null;
+	[SerializeField] private NetworkLobbyPlayer RoomPlayerPrefab = null;
+
+	[Header("Game")]
+	[SerializeField] private NetworkGamePlayer GamePlayerPrefab = null;
 
 	public static event Action OnClientConnected;
 	public static event Action OnClientDisconnected;
 
-	public List<NetworkRoomPlayerLobby> RoomPlayers { get; } = new List<NetworkRoomPlayerLobby>();
+	public List<NetworkLobbyPlayer> RoomPlayers { get; } = new List<NetworkLobbyPlayer>();
+
+	public List<NetworkGamePlayer> GamePlayers { get; } = new List<NetworkGamePlayer>();
+	public List<NetworkGamePlayer> GameSpector { get; } = new List<NetworkGamePlayer>();
+
 
 	#region Server
 
-	public override void OnStartServer() => spawnPrefabs = Resources.LoadAll<GameObject>("SpawnablePrefabs").ToList();
+	public override void OnStartServer()
+	{
+		spawnPrefabs = Resources.LoadAll<GameObject>("SpawnablePrefabs").ToList();
+		print(this.networkAddress);
+	}
 
 
 	public override void OnStopServer()
@@ -34,12 +47,13 @@ public class NetworkManagerAmongFall : NetworkManager
 		{
 			bool isLeader = RoomPlayers.Count == 0;
 
-			NetworkRoomPlayerLobby roomPlayerInstance = Instantiate(RoomPlayerPrefab);
+			NetworkLobbyPlayer roomPlayerInstance = Instantiate(RoomPlayerPrefab);
 
 			roomPlayerInstance.IsLeader = isLeader;
 
 			NetworkServer.AddPlayerForConnection(conn, roomPlayerInstance.gameObject);
 		}
+		base.OnServerAddPlayer(conn);
 	}
 
 	public override void OnServerConnect(NetworkConnection conn)
@@ -60,7 +74,7 @@ public class NetworkManagerAmongFall : NetworkManager
 	{
 		if (conn.identity != null)
 		{
-			var player = conn.identity.GetComponent<NetworkRoomPlayerLobby>();
+			var player = conn.identity.GetComponent<NetworkLobbyPlayer>();
 			RoomPlayers.Remove(player);
 
 
@@ -93,6 +107,42 @@ public class NetworkManagerAmongFall : NetworkManager
 		}
 
 		return true;
+	}
+
+	public void StartGame()
+	{
+		print("meow2");
+		if ("Assets/Scenes/" + SceneManager.GetActiveScene().name + ".unity" == MenuScene)
+		{
+			if( !IsReadyToStart() )
+			{
+				return;
+			}
+
+			ServerChangeScene(GameSceneDruid);
+		}
+	}
+
+	public override void ServerChangeScene(string newSceneName)
+	{
+		print("meow");
+		if ("Assets/Scenes/" + SceneManager.GetActiveScene().name + ".unity" == MenuScene)// && newSceneName.StartsWith(GameSceneDruid))
+		{
+			for(int i = RoomPlayers.Count - 1; i >= 0; i--)
+			{
+				var conn = RoomPlayers[i].connectionToClient;
+				var gamePlayerInstance = Instantiate(GamePlayerPrefab);
+
+				gamePlayerInstance.SetDisplayName(RoomPlayers[i].DisplayName);
+				
+
+				NetworkServer.Destroy(conn.identity.gameObject);
+
+				NetworkServer.ReplacePlayerForConnection(conn, gamePlayerInstance.gameObject, true);
+			}
+		}
+
+		base.ServerChangeScene(newSceneName);
 	}
 
 	#endregion

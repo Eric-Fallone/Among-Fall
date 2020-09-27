@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NetworkRoomPlayerLobby : NetworkBehaviour
+public class NetworkLobbyPlayer : NetworkBehaviour
 {
 	[SerializeField] private GameObject LobbyUI = null;
 	[SerializeField] private TMP_Text[] playerNamesText = new TMP_Text[10];
@@ -132,6 +132,8 @@ public class NetworkRoomPlayerLobby : NetworkBehaviour
 		{
 			return;
 		}
-		//start game
+
+		Room.StartGame();
+
 	}
 }

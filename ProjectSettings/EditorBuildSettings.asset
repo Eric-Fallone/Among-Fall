@@ -11,4 +11,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Offline.unity
     guid: ee62503410bd0c040b1b6a8d7dc71b17
+  - enabled: 1
+    path: Assets/Scenes/Lobby.unity
+    guid: fa762c203c75d264fa695cda94729219
+  - enabled: 1
+    path: Assets/Scenes/Level - Druid.unity
+    guid: ca4fbe4fa5173b144b4cdb3d13b35a8d
   m_configObjects: {}

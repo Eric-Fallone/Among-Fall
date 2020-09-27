@@ -3439,6 +3439,7 @@ MonoBehaviour:
   spawnPrefabs:
   - {fileID: 4444977745170027018, guid: 7dff7c499a4a28649baae9b5cb55d624, type: 3}
   - {fileID: 2269443097824386725, guid: c4653270e66d48c40aad860de8d4999c, type: 3}
+  - {fileID: 4444977745170027018, guid: 7dff7c499a4a28649baae9b5cb55d624, type: 3}
   MinPlayers: 1
   MenuScene: Assets/Scenes/Lobby.unity
   GameSceneDruid: Assets/Scenes/Level - Druid.unity

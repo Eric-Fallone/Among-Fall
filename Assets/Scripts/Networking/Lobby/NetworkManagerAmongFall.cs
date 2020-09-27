@@ -111,23 +111,21 @@ public class NetworkManagerAmongFall : NetworkManager
 
 	public void StartGame()
 	{
-		print("meow2");
 		if ("Assets/Scenes/" + SceneManager.GetActiveScene().name + ".unity" == MenuScene)
 		{
 			if( !IsReadyToStart() )
 			{
 				return;
 			}
-
 			ServerChangeScene(GameSceneDruid);
 		}
 	}
 
 	public override void ServerChangeScene(string newSceneName)
 	{
-		print("meow");
-		if ("Assets/Scenes/" + SceneManager.GetActiveScene().name + ".unity" == MenuScene)// && newSceneName.StartsWith(GameSceneDruid))
+		if ("Assets/Scenes/" + SceneManager.GetActiveScene().name + ".unity" == MenuScene && newSceneName.StartsWith("Assets/Scenes/Level"))
 		{
+			
 			for(int i = RoomPlayers.Count - 1; i >= 0; i--)
 			{
 				var conn = RoomPlayers[i].connectionToClient;
@@ -135,7 +133,6 @@ public class NetworkManagerAmongFall : NetworkManager
 
 				gamePlayerInstance.SetDisplayName(RoomPlayers[i].DisplayName);
 				
-
 				NetworkServer.Destroy(conn.identity.gameObject);
 
 				NetworkServer.ReplacePlayerForConnection(conn, gamePlayerInstance.gameObject, true);

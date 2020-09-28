@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.Controls;
 
 public class PlayerInputControllerAmongFall : NetworkBehaviour
 {
@@ -39,7 +40,7 @@ public class PlayerInputControllerAmongFall : NetworkBehaviour
 		controls.Player.Move.performed += inputValueWASD => SetMovement(inputValueWASD.ReadValue<Vector2>());
 		controls.Player.Move.canceled += ctx => ResetMovement();
 
-
+		//scroll inputs found on the camera script; 
 	}
 
 	[ClientCallback]

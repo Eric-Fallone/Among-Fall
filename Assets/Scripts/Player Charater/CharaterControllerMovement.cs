@@ -7,37 +7,38 @@ using UnityEngine.AI;
 
 public class CharaterControllerMovement : NetworkBehaviour
 {
-	public float speed = 10f;
+	[SerializeField] private PlayerInputControllerAmongFall playerInputs;
 
-	public Vector3 inputValue = Vector3.zero;
+	[Header("Customizable Variables")]
+	[SerializeField] private float speed = 10f;
+
 	private float inputSqrMagnitude;
+	private Vector3 movePosHelper = new Vector3();
 
 	public override void OnStartAuthority()
 	{
 		enabled = true;
 	}
 
-	// Start is called before the first frame update
-	void Start()
-    {
-        
-    }
-
     // Update is called once per frame
     void FixedUpdate()
     {
-		SetInput();
 		Step();
     }
 
 	private void Step()
 	{
-		inputSqrMagnitude = inputValue.sqrMagnitude;
+
+		inputSqrMagnitude = playerInputs.prevWASDInput.sqrMagnitude;
 		if (inputSqrMagnitude > .1f)
 		{
-			Vector3 newPostion = transform.position + (inputValue * Time.deltaTime * speed);
+			movePosHelper.x = playerInputs.prevWASDInput.x;
+			movePosHelper.z = playerInputs.prevWASDInput.y;
+
+
+			Vector3 newPostion = transform.position + (movePosHelper * Time.deltaTime * speed);
 			NavMeshHit hit;
-			bool isValid = NavMesh.SamplePosition(newPostion, out hit, .3f, NavMesh.AllAreas);
+			bool isValid = NavMesh.SamplePosition(newPostion, out hit, .1f, NavMesh.AllAreas);
 			if (isValid)
 			{
 				if ((transform.position - hit.position).magnitude >= .02f)
@@ -54,15 +55,6 @@ public class CharaterControllerMovement : NetworkBehaviour
 		else
 		{
 			//no Movement
-		}
-	}
-
-	private void SetInput()
-	{
-		if (enabled)
-		{
-			inputValue.x = Input.GetAxis("Horizontal");
-			inputValue.z = Input.GetAxis("Vertical");
 		}
 	}
 }

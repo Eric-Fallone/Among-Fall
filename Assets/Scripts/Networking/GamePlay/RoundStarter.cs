@@ -81,7 +81,7 @@ public class RoundStarter : NetworkBehaviour
 	[ClientRpc]
 	private void RpcStartRound()
 	{
-		Debug.Log("Start Client");
+		PlayerInputControllerAmongFall.RemoveBlock(PlayerInputMapNames.Player);
 	}
 
 	#endregion

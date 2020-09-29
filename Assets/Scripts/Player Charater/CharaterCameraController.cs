@@ -7,15 +7,11 @@ using System;
 
 public class CharaterCameraController : NetworkBehaviour
 {
-	[SerializeField] private PlayerInputControllerAmongFall playerInputs;
-
 	[Header("Camera")]
 	[SerializeField] private Vector2 ScrollHeighMixMax = new Vector2();
 	[SerializeField] private float ScrollStartingHeight = 0f;
 	[SerializeField] private Transform playerTransform = null;
 	[SerializeField] private CinemachineVirtualCamera virtualCamera = null;
-
-
 
 	private CinemachineTransposer transposer;
 
@@ -27,8 +23,8 @@ public class CharaterCameraController : NetworkBehaviour
 		enabled = true;
 
 		//Binds Look to change of mouse
-		playerInputs.controls.Player.Look.performed += ctx => Look(ctx.ReadValue<Vector2>());
-		playerInputs.controls.Player.Scroll.performed += inputValueScroll => SetScroll(inputValueScroll.ReadValue<float>());
+		PlayerInputControllerAmongFall.controls.Player.Look.performed += ctx => Look(ctx.ReadValue<Vector2>());
+		PlayerInputControllerAmongFall.controls.Player.Scroll.performed += inputValueScroll => SetScroll(inputValueScroll.ReadValue<float>());
 	}
 
 	private void SetScroll(float ScrollDir)

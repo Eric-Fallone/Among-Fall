@@ -28,6 +28,13 @@ public class PlayerSpawnSystem : NetworkBehaviour
 		NetworkManagerAmongFall.OnServerReadied += SpawnPlayer;
 	}
 
+	[Client]
+	public override void OnStartClient()
+	{
+		PlayerInputControllerAmongFall.AddBlock(PlayerInputMapNames.Player);
+		PlayerInputControllerAmongFall.controls.Player.Scroll.Enable();
+	}
+
 	[Server]
 	public void SpawnPlayer(NetworkConnection conn)
 	{

@@ -7,8 +7,6 @@ using UnityEngine.AI;
 
 public class CharaterControllerMovement : NetworkBehaviour
 {
-	[SerializeField] private PlayerInputControllerAmongFall playerInputs;
-
 	[Header("Customizable Variables")]
 	[SerializeField] private float speed = 10f;
 
@@ -29,11 +27,11 @@ public class CharaterControllerMovement : NetworkBehaviour
 	private void Step()
 	{
 
-		inputSqrMagnitude = playerInputs.prevWASDInput.sqrMagnitude;
+		inputSqrMagnitude = PlayerInputControllerAmongFall.prevWASDInput.sqrMagnitude;
 		if (inputSqrMagnitude > .1f)
 		{
-			movePosHelper.x = playerInputs.prevWASDInput.x;
-			movePosHelper.z = playerInputs.prevWASDInput.y;
+			movePosHelper.x = PlayerInputControllerAmongFall.prevWASDInput.x;
+			movePosHelper.z = PlayerInputControllerAmongFall.prevWASDInput.y;
 
 
 			Vector3 newPostion = transform.position + (movePosHelper * Time.deltaTime * speed);

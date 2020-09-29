@@ -7,8 +7,10 @@ using UnityEngine.InputSystem.Controls;
 
 public class PlayerInputControllerAmongFall : NetworkBehaviour
 {
-	private Controls _controls;
-	public Controls controls
+	private static readonly IDictionary<string, int> mapPlayerStates = new Dictionary<string, int>();
+
+	private static Controls _controls;
+	public static Controls controls
 	{
 		get
 		{
@@ -20,8 +22,8 @@ public class PlayerInputControllerAmongFall : NetworkBehaviour
 		}
 	}
 
-	private Vector2 _prevWASDInput;
-	public Vector2 prevWASDInput
+	private static Vector2 _prevWASDInput;
+	public static Vector2 prevWASDInput
 	{
 		get
 		{
@@ -43,26 +45,53 @@ public class PlayerInputControllerAmongFall : NetworkBehaviour
 		//scroll inputs found on the camera script; 
 	}
 
-	[ClientCallback]
-	private void OnEnable()
-	{
-		controls.Enable();
-	}
 
 	[ClientCallback]
-	private void OnDisable()
+	private void OnDestroy()
 	{
-		controls.Disable();
+		_controls = null;
+	}
+	[Client]
+	public static void AddBlock(string mapKey)
+	{
+		mapPlayerStates.TryGetValue(mapKey, out int value);
+		mapPlayerStates[mapKey] = value + 1;
+
+		UpdateMapState(mapKey);
 	}
 
 	[Client]
-	private void SetMovement(Vector2 movement)
+	public static void RemoveBlock(string mapKey)
+	{
+		mapPlayerStates.TryGetValue(mapKey, out int value);
+		mapPlayerStates[mapKey] = Mathf.Max(value - 1, 0);
+
+		UpdateMapState(mapKey);
+	}
+
+	[Client]
+	private static void UpdateMapState(string mapKey)
+	{
+		int value = mapPlayerStates[mapKey];
+
+		if(value > 0)
+		{
+			controls.asset.FindActionMap(mapKey).Disable();
+			return;
+		}
+		print("Enabled");
+		controls.asset.FindActionMap(mapKey).Enable();
+	}
+
+
+	[Client]
+	private static void SetMovement(Vector2 movement)
 	{
 		prevWASDInput = movement;
 	}
 
 	[Client]
-	private void ResetMovement()
+	private static void ResetMovement()
 	{
 		prevWASDInput = Vector2.zero;
 	}

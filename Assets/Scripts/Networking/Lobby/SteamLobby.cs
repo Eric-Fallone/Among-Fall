@@ -9,10 +9,15 @@ enum LobbyType {PUBLIC,PRIVATE};
 public class SteamLobby : MonoBehaviour
 {
 	protected Callback<LobbyCreated_t> lobbyCreated;
-	protected Callback<GameLobbyJoinRequested_t> gameLobbyJoinRequested;
 	protected Callback<LobbyEnter_t> lobbyEntered;
 
+	protected Callback<LobbyMatchList_t> FindLobbies;
+
+	protected Callback<GameLobbyJoinRequested_t> gameLobbyJoinRequested;
+
 	private const string HostAddressKey = "HostAddress";
+
+	private static CSteamID LobbyId;
 
 	[SerializeField] private GameObject ButtonsHolder = null;
 
@@ -31,6 +36,9 @@ public class SteamLobby : MonoBehaviour
 		}
 		lobbyCreated = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
 		lobbyEntered = Callback<LobbyEnter_t>.Create(OnLobbyEntered);
+
+		FindLobbies = Callback<LobbyMatchList_t>.Create(OnFindPublicLobbies);
+
 		gameLobbyJoinRequested = Callback<GameLobbyJoinRequested_t>.Create(OnGameLobbyJoinRequested);
 
 
@@ -41,10 +49,39 @@ public class SteamLobby : MonoBehaviour
 		startLobby(LobbyType.PRIVATE);
 	}
 
+	public void startPublicLobby()
+	{
+		startLobby(LobbyType.PUBLIC);
+	}
+
 	private void startLobby(LobbyType lobbyType)
 	{
 		ButtonsHolder.SetActive(false);
-		SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypeFriendsOnly, networkManager.maxConnections);
+		if (lobbyType == LobbyType.PRIVATE)
+		{
+			SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypeFriendsOnly, networkManager.maxConnections);
+		}
+		if (lobbyType == LobbyType.PUBLIC)
+		{
+			SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypePublic, networkManager.maxConnections);
+		}
+	}
+
+	public void FindPublicLobby()
+	{
+		SteamMatchmaking.RequestLobbyList();
+	}
+
+	private void OnFindPublicLobbies(LobbyMatchList_t callback)
+	{
+		print(callback.m_nLobbiesMatching);
+	}
+
+	public static void OpenFriendsListInvite()
+	{
+		print("meow");
+		SteamFriends.ActivateGameOverlayInviteDialog(LobbyId);
+		
 	}
 
 	private void OnLobbyCreated(LobbyCreated_t callback)
@@ -70,8 +107,11 @@ public class SteamLobby : MonoBehaviour
 		{
 			return;
 		}
+
+		LobbyId = new CSteamID(callback.m_ulSteamIDLobby);
+
 		string hostAddress = SteamMatchmaking.GetLobbyData(
-			new CSteamID(callback.m_ulSteamIDLobby),
+			LobbyId,
 			HostAddressKey
 			);
 

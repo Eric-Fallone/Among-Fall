@@ -17,13 +17,17 @@ public class NetworkManagerAmongFall : NetworkManager
 
 	[Header("Game")]
 	[SerializeField] private NetworkGamePlayer GamePlayerPrefab = null;
+
 	[SerializeField] private GameObject PlayerSpawnSystem = null;
+	[SerializeField] private GameObject RoundStarter = null;
 
 	public static event Action OnClientConnected;
 	public static event Action OnClientDisconnected;
 	public static event Action<NetworkConnection> OnServerReadied;
+	public static event Action OnServerStopped;
 
 	public List<NetworkLobbyPlayer> RoomPlayers { get; } = new List<NetworkLobbyPlayer>();
+
 
 	public List<NetworkGamePlayer> GamePlayers { get; } = new List<NetworkGamePlayer>();
 	public List<NetworkGamePlayer> GameSpector { get; } = new List<NetworkGamePlayer>();
@@ -35,7 +39,6 @@ public class NetworkManagerAmongFall : NetworkManager
 	public override void OnStartServer()
 	{
 		spawnPrefabs = Resources.LoadAll<GameObject>("SpawnablePrefabs").ToList();
-		print(spawnPrefabs.Count);
 
 		print(this.networkAddress);
 	}
@@ -53,7 +56,10 @@ public class NetworkManagerAmongFall : NetworkManager
 
 	public override void OnStopServer()
 	{
+		OnServerStopped?.Invoke();
+
 		RoomPlayers.Clear();
+		GamePlayers.Clear();
 	}
 
 	public override void OnServerAddPlayer(NetworkConnection conn)
@@ -178,12 +184,15 @@ public class NetworkManagerAmongFall : NetworkManager
 		OnClientDisconnected?.Invoke();
 	}
 
-	public override void OnServerChangeScene(string newSceneName)
+	public override void OnServerSceneChanged(string newSceneName)
 	{
 		if (newSceneName.StartsWith("Assets/Scenes/Level"))
 		{
 			GameObject playerSpawnSystemInstance = Instantiate(PlayerSpawnSystem);
 			NetworkServer.Spawn(playerSpawnSystemInstance);
+
+			GameObject roundStarterInstance = Instantiate(RoundStarter);
+			NetworkServer.Spawn(roundStarterInstance);
 		}
 	}
 	

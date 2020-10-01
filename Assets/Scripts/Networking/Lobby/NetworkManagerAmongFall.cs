@@ -28,7 +28,6 @@ public class NetworkManagerAmongFall : NetworkManager
 
 	public List<NetworkLobbyPlayer> RoomPlayers { get; } = new List<NetworkLobbyPlayer>();
 
-
 	public List<NetworkGamePlayer> GamePlayers { get; } = new List<NetworkGamePlayer>();
 	public List<NetworkGamePlayer> GameSpector { get; } = new List<NetworkGamePlayer>();
 
@@ -180,7 +179,6 @@ public class NetworkManagerAmongFall : NetworkManager
 	public override void OnClientDisconnect(NetworkConnection conn)
 	{
 		base.OnClientDisconnect(conn);
-
 		OnClientDisconnected?.Invoke();
 	}
 

@@ -69,20 +69,30 @@ public class SteamLobby : MonoBehaviour
 
 	public void FindPublicLobby()
 	{
+		SteamMatchmaking.AddRequestLobbyListResultCountFilter(10);
 		SteamMatchmaking.RequestLobbyList();
 	}
 
 	private void OnFindPublicLobbies(LobbyMatchList_t callback)
 	{
 		print(callback.m_nLobbiesMatching);
+		if (callback.m_nLobbiesMatching != 0)
+		{
+			print(callback.m_nLobbiesMatching);
+			print(SteamMatchmaking.GetLobbyByIndex( (int) callback.m_nLobbiesMatching));
+		}
 	}
 
 	public static void OpenFriendsListInvite()
 	{
-		print("meow");
-		SteamFriends.ActivateGameOverlayInviteDialog(LobbyId);
-		
+		SteamFriends.ActivateGameOverlayInviteDialog(LobbyId);	
 	}
+
+	public static void LeaveSteamLobby()
+	{
+		SteamMatchmaking.LeaveLobby(LobbyId);
+	}
+
 
 	private void OnLobbyCreated(LobbyCreated_t callback)
 	{

@@ -1,0 +1,18 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Mirror;
+
+public class OnAuthorityStartingObjectEnabler : NetworkBehaviour
+{
+	[SerializeField] private GameObject[] ObjectsToEnable;
+
+	public override void OnStartAuthority()
+	{
+		foreach (GameObject gameObj in ObjectsToEnable)
+		{
+			gameObj.SetActive(true);
+		}
+	}
+
+}

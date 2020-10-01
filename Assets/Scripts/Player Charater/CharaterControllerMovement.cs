@@ -7,6 +7,9 @@ using UnityEngine.AI;
 
 public class CharaterControllerMovement : NetworkBehaviour
 {
+	
+	//[SerializeField] private FieldOfView FieldOfView;
+
 	[Header("Customizable Variables")]
 	[SerializeField] private float speed = 10f;
 
@@ -42,6 +45,7 @@ public class CharaterControllerMovement : NetworkBehaviour
 				if ((transform.position - hit.position).magnitude >= .02f)
 				{
 					transform.position = hit.position;
+					//FieldOfView.UpdateOrigin();
 				}
 				else
 				{

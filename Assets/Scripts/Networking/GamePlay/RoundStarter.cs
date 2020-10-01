@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using System.Linq;
+using System;
 
 public class RoundStarter : NetworkBehaviour
 {
@@ -21,7 +22,6 @@ public class RoundStarter : NetworkBehaviour
 		}
 
 	}
-
 
 	public void CountDownEnded()
 	{
@@ -63,9 +63,27 @@ public class RoundStarter : NetworkBehaviour
 			return;
 		}
 
-		animator.enabled = true;
 
+		CreateRoles();
+
+		RpcGetRole();
+
+		//start the count downs to start the game first server then client
+		animator.enabled = true;
 		RpcStartCountDown();
+	}
+
+	[Server]
+	private void CreateRoles()
+	{
+		if(room.RoomPlayers.Count > 7)
+		{
+			// 2 imposters
+		}
+		else
+		{
+			//1 imposter
+		}
 	}
 
 	#endregion
@@ -82,6 +100,13 @@ public class RoundStarter : NetworkBehaviour
 	private void RpcStartRound()
 	{
 		PlayerInputControllerAmongFall.RemoveBlock(PlayerInputMapNames.Player);
+	}
+
+	[ClientRpc]
+	private void RpcGetRole()
+	{
+		//get player 
+		print("getting role from server");
 	}
 
 	#endregion

@@ -134,6 +134,17 @@ public class NetworkLobbyPlayer : NetworkBehaviour
 		}
 
 		Room.StartGame();
+	}
 
+	[Client]
+	public void OpenFriendsListToInvite()
+	{
+		SteamLobby.OpenFriendsListInvite();
+	}
+
+	[Client]
+	public void StopClient()
+	{
+		SteamLobby.LeaveSteamLobby();
 	}
 }

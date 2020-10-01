@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ParrelSync;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -26,7 +27,18 @@ public class PlayerNameInput : MonoBehaviour
 		}
 
 		string defaultName = PlayerPrefs.GetString(PlayerPrefsNameKey);
-		NameInputField.text = defaultName;
+
+		//dev only fix remove this if statement
+		if (ClonesManager.GetArgument() != "" )
+		{
+			print("asd");
+			NameInputField.text = ClonesManager.GetArgument();
+		}
+		else
+		{
+			NameInputField.text = defaultName;
+		}
+
 		CheckNameValid(defaultName);
 	}
 
@@ -39,6 +51,6 @@ public class PlayerNameInput : MonoBehaviour
 	{
 		DisplayName = NameInputField.text;
 
-		PlayerPrefs.SetString(PlayerPrefsNameKey, DisplayName);
+		//PlayerPrefs.SetString(PlayerPrefsNameKey, DisplayName);
 	}
 }

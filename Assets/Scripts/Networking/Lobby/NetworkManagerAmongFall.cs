@@ -9,13 +9,27 @@ public class NetworkManagerAmongFall : NetworkManager
 {
 	[Header("Game")]
 	[SerializeField] private int MinPlayers = 2;
+
+	public static int NumOfImposters = 2;
+
+	[Header("Tasks Per Lobby")]
+	 public int NumOfCommunityTasks = 1;
+	 public int NumOfVisualTasks = 1;
+	 public int NumOfIncrementalTasks = 1;
+
+	[Header("Tasks Per Person")]
+	public int NumOfCommonTasks = 1;
+	public int NumOfLongTasks = 2;
+	public int NumOfShortTasks = 5;
+
+	[Header("Scenes")]
 	[Scene] [SerializeField] private string MenuScene = string.Empty;
 	[Scene] [SerializeField] private string GameSceneDruid = string.Empty;
 
 	[Header("Room")]
 	[SerializeField] private NetworkLobbyPlayer RoomPlayerPrefab = null;
 
-	[Header("Game")]
+	[Header("Game player prefab")]
 	[SerializeField] private NetworkGamePlayer GamePlayerPrefab = null;
 
 	[SerializeField] private GameObject PlayerSpawnSystem = null;
@@ -193,7 +207,12 @@ public class NetworkManagerAmongFall : NetworkManager
 			NetworkServer.Spawn(roundStarterInstance);
 		}
 	}
-	
+
 
 	#endregion
+
+	public static int GetNumberOfImposters()
+	{
+		return NumOfImposters;
+	}
 }

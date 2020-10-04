@@ -11,6 +11,8 @@ public class PlayerSpawnSystem : NetworkBehaviour
 	private static List<Transform> spawnPoints = new List<Transform>();
 	private int nextSpawnIndex = 0;
 
+	private static List<GameObject> AllPlayersPrefabs = new List<GameObject>();
+
 	public static void AddSpawnPoint( Transform transformIn )
 	{
 		spawnPoints.Add(transformIn);
@@ -47,10 +49,17 @@ public class PlayerSpawnSystem : NetworkBehaviour
 		}
 
 		GameObject playerInstance = Instantiate(playerPrefab, spawnPoints[nextSpawnIndex].position, spawnPoints[nextSpawnIndex].rotation);
-		
-		NetworkServer.Spawn(playerInstance, conn);
+		playerInstance.GetComponent<PlayerInfoHolder>().playerNumber = nextSpawnIndex;
+		AllPlayersPrefabs.Add(playerInstance);
 
+		NetworkServer.Spawn(playerInstance, conn);
 		nextSpawnIndex++;
+	}
+
+	[Server]
+	public static int GetPlayerIndex(GameObject playerPrefab)
+	{
+		return AllPlayersPrefabs.IndexOf(playerPrefab);
 	}
 
 }

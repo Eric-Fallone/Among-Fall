@@ -19,6 +19,19 @@ public class NetworkGamePlayer : NetworkBehaviour
 		}
 	}
 
+	private GameObject _playerObject;
+	public GameObject PlayerObject
+	{
+		get
+		{
+			return _playerObject;
+		}
+		set
+		{
+			_playerObject = value;
+		}
+	}
+
 	private NetworkManagerAmongFall _room;
 	private NetworkManagerAmongFall Room
 	{
@@ -51,6 +64,10 @@ public class NetworkGamePlayer : NetworkBehaviour
 		this.displayName = displayName;
 	}
 
+	public string GetName()
+	{
+		return displayName;
+	}
 
 }
 

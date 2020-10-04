@@ -20,8 +20,12 @@ public class RoundStarter : NetworkBehaviour
 			}
 			return _room = NetworkManager.singleton as NetworkManagerAmongFall;
 		}
-
 	}
+
+	private List<Crewmate> CrewMateTaskLists = new List<Crewmate>();
+	private List<int> imposterIndexes = new List<int>();
+
+
 
 	public void CountDownEnded()
 	{
@@ -63,6 +67,7 @@ public class RoundStarter : NetworkBehaviour
 			return;
 		}
 
+		//start game
 
 		CreateRoles();
 
@@ -76,14 +81,29 @@ public class RoundStarter : NetworkBehaviour
 	[Server]
 	private void CreateRoles()
 	{
-		if(room.RoomPlayers.Count > 7)
+		//clean up last round
+		CrewMateTaskLists.Clear();
+		imposterIndexes.Clear();
+
+
+
+		imposterIndexes = IntRange.UniqueRandomIntsInRange(0, room.GamePlayers.Count, NetworkManagerAmongFall.NumOfImposters);
+
+		DebuggingList<int>.PrintList(imposterIndexes);
+
+		for(int i = 0; i < room.GamePlayers.Count - NetworkManagerAmongFall.NumOfImposters; i++)
 		{
-			// 2 imposters
+
 		}
-		else
+
+		for(int i = 0; i < room.GamePlayers.Count; i++)
 		{
-			//1 imposter
+			if (imposterIndexes.Contains(i))
+			{
+
+			}
 		}
+
 	}
 
 	#endregion
@@ -106,7 +126,15 @@ public class RoundStarter : NetworkBehaviour
 	private void RpcGetRole()
 	{
 		//get player 
-		print("getting role from server");
+		foreach (GameObject gameObj in GameObject.FindGameObjectsWithTag("Player"))
+		{
+			if(gameObj.GetComponent<PlayerInfoHolder>() != null && gameObj.GetComponent<NetworkTransform>().hasAuthority)
+			{
+				
+				//print(gameObj.GetComponent<PlayerInfoHolder>().playerNumber);
+				
+			}
+		}
 	}
 
 	#endregion

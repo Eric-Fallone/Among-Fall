@@ -61,7 +61,7 @@ public class FieldOfView : MonoBehaviour {
 			temp.y = 0;
 			temp.z = y;
 			RaycastHit raycastHit;
-			Physics.Raycast(origin , temp, out raycastHit, viewDistance);
+			Physics.Raycast(origin , temp, out raycastHit, viewDistance, layerMask);
             if (raycastHit.collider == null) {
 				// No hit
 				vertex = origin + temp * viewDistance;

@@ -22,11 +22,6 @@ public class RoundStarter : NetworkBehaviour
 		}
 	}
 
-	private List<Crewmate> CrewMateTaskLists = new List<Crewmate>();
-	private List<int> imposterIndexes = new List<int>();
-
-
-
 	public void CountDownEnded()
 	{
 		animator.enabled = false;
@@ -81,29 +76,7 @@ public class RoundStarter : NetworkBehaviour
 	[Server]
 	private void CreateRoles()
 	{
-		//clean up last round
-		CrewMateTaskLists.Clear();
-		imposterIndexes.Clear();
-
-
-
-		imposterIndexes = IntRange.UniqueRandomIntsInRange(0, room.GamePlayers.Count, NetworkManagerAmongFall.NumOfImposters);
-
-		DebuggingList<int>.PrintList(imposterIndexes);
-
-		for(int i = 0; i < room.GamePlayers.Count - NetworkManagerAmongFall.NumOfImposters; i++)
-		{
-
-		}
-
-		for(int i = 0; i < room.GamePlayers.Count; i++)
-		{
-			if (imposterIndexes.Contains(i))
-			{
-
-			}
-		}
-
+		
 	}
 
 	#endregion

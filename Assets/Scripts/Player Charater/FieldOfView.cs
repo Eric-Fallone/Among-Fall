@@ -26,11 +26,11 @@ public class FieldOfView : MonoBehaviour {
 
 	private GameObject ObjectToFollow;
 
-    private void Start() {
+    private void Awake() {
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
         fov = 360f;
-        viewDistance = 5f;
+        viewDistance = NetworkManagerAmongFall.ViewDistance;
 
 		ObjectToFollow = gameObject.transform.parent.gameObject;
 		gameObject.transform.parent = null;

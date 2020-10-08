@@ -9,9 +9,10 @@ public class NetworkManagerAmongFall : NetworkManager
 {
 	[Header("Game")]
 	[SerializeField] private int MinPlayers = 2;
+	[SerializeField] public static float ViewDistance = 7f;
 
 	public static int NumOfImposters = 2;
-
+		
 	[Header("Tasks Per Lobby")]
 	 public int NumOfCommunityTasks = 1;
 	 public int NumOfVisualTasks = 1;

@@ -2,7 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Crewmate : GameplayRole
+public class CrewMate : GameplayRole
 {
-	public List<Task> ListOfTasks;
+	public List<GameObject> ListOfTasks;
+
+	public override void SetRole()
+	{
+		Role = RoleType.CREWMATE;
+	}
 }

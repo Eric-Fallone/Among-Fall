@@ -3760,6 +3760,7 @@ MonoBehaviour:
   playerSpawnMethod: 0
   spawnPrefabs: []
   MinPlayers: 1
+  NumOfImposters: 1
   NumOfCommunityTasks: 1
   NumOfVisualTasks: 1
   NumOfIncrementalTasks: 1

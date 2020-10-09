@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
 public class Imposter : GameplayRole
 {
@@ -25,7 +26,7 @@ public class Imposter : GameplayRole
 			{
 				if ( !killablesPrev.Contains(killComponent) )
 				{
-					KillableInRange();
+					KillableInRange(killComponent);
 					killablesPrev.Add(killComponent);
 				}
 
@@ -37,20 +38,30 @@ public class Imposter : GameplayRole
 		{
 			if ( !killablesFound.Contains(killablesPrev[i]) )
 			{
-				KillableOutOfRange();
+				KillableOutOfRange(killablesPrev[i]);
 				killablesPrev.RemoveAt(i);
 			}
 		}
 	}
 
-	private void KillableInRange()
+	public override void SetRole()
 	{
-		print("Found");
+		Role = RoleType.CREWMATE;
 	}
 
-	private void KillableOutOfRange()
+	private void KillableInRange(Killable target)
 	{
-		print("Leaving Found");
+		target.ShowIndicator();
 	}
 
+	private void KillableOutOfRange(Killable target)
+	{
+		target.HideIndicator();
+	}
+
+	[Command]
+	public void KillTargetPlayer()
+	{
+
+	}
 }

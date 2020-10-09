@@ -7,6 +7,18 @@ using System;
 
 public class RoundStarter : NetworkBehaviour
 {
+	private TaskManager _taskManager;
+	private TaskManager taskManager
+	{
+		get
+		{
+			if(_taskManager != null)
+			{
+				return _taskManager;
+			}
+			return _taskManager = TaskManager.instance;
+		}
+	}
 	[SerializeField] private Animator animator = null;
 
 	private NetworkManagerAmongFall _room;
@@ -76,7 +88,7 @@ public class RoundStarter : NetworkBehaviour
 	[Server]
 	private void CreateRoles()
 	{
-		
+		taskManager.createRoles();
 	}
 
 	#endregion
@@ -101,12 +113,43 @@ public class RoundStarter : NetworkBehaviour
 		//get player 
 		foreach (GameObject gameObj in GameObject.FindGameObjectsWithTag("Player"))
 		{
-			if(gameObj.GetComponent<PlayerInfoHolder>() != null && gameObj.GetComponent<NetworkTransform>().hasAuthority)
+			PlayerInfoHolder playerInfo = gameObj.GetComponent<PlayerInfoHolder>();
+
+			//if player set up role in player prefab
+			if(playerInfo != null && gameObj.GetComponent<NetworkTransform>().hasAuthority)
 			{
-				
-				//print(gameObj.GetComponent<PlayerInfoHolder>().playerNumber);
+
+				List<GameObject> tasksToGiveToPlayer = taskManager.GetRole(playerInfo.playerNumber);
+
+				if (tasksToGiveToPlayer == null)
+				{
+					//imposter
+					playerInfo.SetImposter();
+				}
+				else
+				{
+					playerInfo.SetCrewMateLocalPlayer(tasksToGiveToPlayer);
+				}
 				
 			}
+			//set all the other players up
+
+			if (playerInfo != null && !gameObj.GetComponent<NetworkTransform>().hasAuthority)
+			{
+				List<GameObject> tasksToGiveToPlayer = taskManager.GetRole(playerInfo.playerNumber);
+
+				if (tasksToGiveToPlayer == null)
+				{
+					//imposter
+					playerInfo.SetImposter();
+				}
+				else
+				{
+					playerInfo.SetCrewMateOtherPlayer();
+				}
+
+			}
+
 		}
 	}
 

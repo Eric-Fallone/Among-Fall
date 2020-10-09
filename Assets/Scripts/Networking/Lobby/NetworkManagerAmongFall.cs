@@ -11,12 +11,12 @@ public class NetworkManagerAmongFall : NetworkManager
 	[SerializeField] private int MinPlayers = 2;
 	[SerializeField] public static float ViewDistance = 7f;
 
-	public static int NumOfImposters = 2;
+	public int NumOfImposters = 2;
 		
 	[Header("Tasks Per Lobby")]
-	 public int NumOfCommunityTasks = 1;
-	 public int NumOfVisualTasks = 1;
-	 public int NumOfIncrementalTasks = 1;
+	public int NumOfCommunityTasks = 1;
+	public int NumOfVisualTasks = 1;
+	public int NumOfIncrementalTasks = 1;
 
 	[Header("Tasks Per Person")]
 	public int NumOfCommonTasks = 1;
@@ -212,7 +212,7 @@ public class NetworkManagerAmongFall : NetworkManager
 
 	#endregion
 
-	public static int GetNumberOfImposters()
+	public int GetNumberOfImposters()
 	{
 		return NumOfImposters;
 	}
